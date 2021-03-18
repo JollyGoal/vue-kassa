@@ -37,12 +37,18 @@
                                             <th class="table_data">Наименовая</th>
                                             <th class="table_data">Номер</th>
                                             <th class="table_data">сумма</th>
+                                            <th class="table_data">Удалить</th>
                                         </tr>
                                         <tr @click="openObj(index)" class="table_row" v-for="(item, index) in tovar"
                                             :key="index">
                                             <td class="table_data">{{item.name}}</td>
                                             <td class="table_data">{{item.id}}</td>
                                             <td class="table_data">{{item.prise}}</td>
+                                            <td class="table_data">
+                                                <button s>
+                                                    <i class="fas fa-trash-alt"></i>  удалить
+                                                </button>
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>
@@ -194,6 +200,7 @@
 
     .btn_block {
         display: flex;
+        width: 100%;
     }
 
     .add {
