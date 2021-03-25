@@ -9,22 +9,28 @@
                         </h1>
                     </div>
                     <div class="exp_list_sum">
+                        <form class="exp_list_block">
+                                <input class="exp_list_input" type="text" placeholder="Название расхода">
+                                <input class="exp_list_input" type="number" min="0" placeholder="Введите сумму расхода">
+                                <div class="exp_list_buttons">
+                                    <button class="exp_list_buttons_btn"><i class="fas fa-plus"></i> Добавить</button>
+                                </div>
+                        </form>
+                    </div>
+                    <div class="exp_list_sum">
                         <div class="exp_list_block">
-                            <input class="exp_list_input" type="text" placeholder="Введите сумму">
-                            <div class="exp_list_buttons">
-                                <button class="exp_list_buttons_btn"><i class="fas fa-plus"></i> Добавить</button>
-                            </div>
+
                         </div>
 
                     </div>
                     <div class="exp_list">
-                        <div class="exp_select_block">
+                        <!--<div class="exp_select_block">
                             <select multiple class="exp_select">
                                 <option class="exp_select_option">Чебурашка</option>
                                 <option class="exp_select_option">Крокодил Гена</option>
                                 <option class="exp_select_option">Шапокляк</option>
                             </select>
-                        </div>
+                        </div>-->
 
                         <div class="table">
                             <div class="table_block">
@@ -60,7 +66,11 @@
 
 <script>
     export default {
-        name: "Exp"
+        name: "Exp",
+        data() {
+            return {}
+        },
+        methods: {},
     }
 </script>
 
@@ -79,6 +89,7 @@
         background: #DCDCDC;
         border-radius: 40px;
     }
+
     .exp_list {
         display: flex;
 
@@ -101,6 +112,7 @@
             font-size: 20px;
             outline: none;
             border: 1px grey solid;
+            margin-right: 15px;
         }
 
         &_buttons {
@@ -111,7 +123,7 @@
 
                 margin-left: 20px;
                 margin-right: 20px;
-                padding: 12px 20px;
+                padding: 8px 20px;
                 border-radius: 10px;
                 color: white;
                 background: linear-gradient(180deg, #4B1CD1 0%, rgba(25, 6, 79, 0.65) 100%);

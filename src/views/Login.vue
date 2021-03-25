@@ -14,7 +14,7 @@
                                     <input type="password" name="password" placeholder="Введите пороль" >
                                 </div>
                                 <div style="text-align: center">
-                                    <button @click="submit__form" class="login__button">Войти</button>
+                                    <button class="login__button">Войти</button>
                                 </div>
                             </form>
                         </div>
@@ -30,15 +30,8 @@
         name: "Login",
         data(){
           return{
-              formData: "",
-              form: {
-                name: "",
-                password: "",
-              },
-          }
-        },
-        methods:{
 
+          }
         },
     }
 </script>
