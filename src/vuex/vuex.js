@@ -9,24 +9,27 @@ const store = createStore({
             items: [],
             itemListOffset: 0,
             query: "",
-
             outcome: [],
             outcomeListOffset: 0,
-
-            activeItem: {}
-
+            activeItem: {},
         }
     },
     actions: {
-        getItems(store) {
+        getItems(store, limit) {
             store.commit('setItems', [{id: "Товаров", name: "в базе", price: "не", count: "найдено"}]);
-            fetch(`${BASE_URL}get-item/?search=${store.state.query}&ordering=id&limit=${PAGING_LIMIT}&offset=${store.state.itemListOffset}`)
+            fetch(`${BASE_URL}get-item/?search=${store.state.query}&ordering=-id&limit=${limit}&offset=${store.state.itemListOffset}`)
                 .then((res) => res.json())
                 .then((data) => {
+                    console.log(data)
                     if (data['results'].length === 0) {
                         store.commit('setItems', [{id: "Товаров", name: "в базе", price: "не", count: "найдено"}]);
                     } else {
                         store.commit('setItems', data['results'])
+                    }
+                    if (data.count > limit) {
+                        console.log(PAGING_LIMIT);
+                        console.log(data.count);
+                        store.state.items(data.count)
                     }
                 });
         },
@@ -38,36 +41,34 @@ const store = createStore({
                 })
                 .then((data) => {
                     store.state.outcome = data['results']
-                    // store.commit('setOutcome', data)
                 });
         },
-        //postItem(store, form) {
-        //     const BASE_URL = "http://192.168.4.69:8000/";
-        //     this.formData = new FormData();
-        //     this.formData.append("name", this.form.name);
-        //     this.formData.append("price", this.form.price);
-        //     this.formData.append("count", this.form.count);
-        //     this.formData.append("percent", this.form.percent);
-        //     this.formData.append("file", this.form.file);
-        //     this.formData.append("min_percent", this.form.min_percent);
-        //     this.formData.append("desc", this.form.desc);
-        //     fetch(`${BASE_URL}item/`, {
-        //         method: 'POST',
-        //         body: this.formData,
-        //     })
-        //         .then((responseJSON) => {
-        //             console.log(responseJSON)
-        //         })
-        //         .catch((err) => {
-        //             console.log(err)
-        //         })
-        //
-        // },
-             postOutcome(store, form) {
-            // this.formData = new FormData();
-            // this.formData.append("name", form.name);
-            // this.formData.append("price", form.price);
-            form.sum = parseInt(form.sum)
+        postItem(store, form) {
+            this.formData = new FormData();
+            for (const name in form) {
+                this.formData.append(name, form[name]);
+            }
+            fetch(`${BASE_URL}item/`, {
+                method: 'POST',
+                body: this.formData,
+            })
+                .then((response) => {
+                    // return response.json();
+                    if (response.status === 201) return response.json();
+                    else console.log("Че та не тоак")
+                })
+                .then((resJSON) => {
+                    store.state.items.unshift(resJSON)
+                    if (store.state.items[store.state.items.length - 1].id === "Товаров") {
+                        store.state.items.pop(-1)
+                    }
+                })
+                // .catch((err) => {
+                //     console.log(err)
+                // })
+        },
+        postOutcome(store, form) {
+            form.sum = parseInt(form.sum);
             fetch(`${BASE_URL}trans/`, {
                 method: 'POST',
                 headers: {
@@ -79,9 +80,7 @@ const store = createStore({
                     return response.json();
                 })
                 .then((resJSON) => {
-                    console.log(store.state.outcome)
                     store.state.outcome.unshift(resJSON)
-                    console.log(store.state.outcome)
                 })
                 .catch((err) => {
                     console.log(err)
@@ -94,15 +93,8 @@ const store = createStore({
         setItems(state, items) {
             state.items = items;
         },
-        // setOutcome(state, out) {
-        //     state.outcome = out
-        // }
     },
-    // getters: {
-    //     outcomeList (state) {
-    //         return state.outcome
-    //     }
-    // }
+
 
 });
 

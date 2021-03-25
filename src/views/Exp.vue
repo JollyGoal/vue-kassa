@@ -72,14 +72,14 @@
         },
         methods: {
             postOutcome() {
-                this.$store.dispatch('postOutcome', this.form)
+                this.$store.dispatch('postOutcome', this.form);
                 return false;
             },
             getOutcome() {
                 if (this.$store.state.outcome.length === 0) {
                     this.$store.dispatch('getOutcome');
                 }
-            }
+            },
         },
         // computed: {
         //     outcomeList () {

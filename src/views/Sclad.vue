@@ -53,7 +53,9 @@
                                     <td class="table_data">{{item.price}}</td>
                                     <td class="table_data">{{item.count}}</td>
                                     <td class="table_data">
-                                        <button class="change"><i class="fas fa-pencil-alt"></i></button>
+                                        <router-link to='/add/${id}'>
+                                            <button class="change"><i class="fas fa-pencil-alt"></i></button>
+                                        </router-link>
                                     </td>
                                     <!-- <td class="table_data">
                                          <button class="remove"><i class="fas fa-trash-alt"></i></button>
@@ -87,12 +89,11 @@
                     </div>
                     <div class="modal-body">
                         <slot name="body">
-                            <form>
+                            <form @submit.prevent="postAdd" ref="main_form">
                                 <div class="input_add" id="vue">
                                     <input type="text" name="name" id="name" placeholder="Введите название"
                                            v-model="form.name">
-                                    <input type="text" v-model="form.price"
-                                           @blur="focusOut" @focus="focusIn" name="price" id="price"
+                                    <input type="number" v-model="form.price" name="price" id="price"
                                            placeholder="Введите Цену">
                                 </div>
                                 <div class="input_add">
@@ -102,18 +103,18 @@
                                            placeholder="Введите процент наценки" v-model="form.percent">
                                 </div>
                                 <div class="input_add">
-                                    <input type="file" ref="file" name="file" id="file">
-                                    <input type="number" min="0"  name="min_percent" id="min_percent"
+                                    <input type="file" name="image" ref="form_image">
+                                    <input type="number" min="0" name="min_percent" id="min_percent"
                                            v-model="form.min_percent"
                                            placeholder="Введите минимальную наценку">
                                 </div>
 
                                 <div class="input_add">
-                                    <textarea type="text" class="textarea" name="desc" id="desc"
-                                              placeholder="Введите описание" v-model="form.desc"></textarea>
+                                    <textarea type="text" class="textarea" name="description" id="description"
+                                              placeholder="Введите описание" v-model="form.description"></textarea>
                                 </div>
                                 <div style="margin-left: auto">
-                                    <button class="modal-send-btn" @click="postItem">+ Добавить</button>
+                                    <input class="modal-send-btn" @click="postAdd" value="+ Добавить">
                                 </div>
                             </form>
                         </slot>
@@ -135,53 +136,66 @@
                 currencyValue: '',
                 formattedCurrencyValue: "",
                 query: "",
-                formData: "",
                 form: {
-                    name: "",
-                    price: "",
-                    count: "",
-                    percent: "",
-                    file: '',
-                    min_percent: "",
-                    desc: "",
+                    name: '',
+                    price: '',
+                    count: '',
+                    percent: '',
+                    min_percent: '',
+                    description: '',
+                    image: '',
                 },
+
             }
         },
         watch: {
             query(param) {
                 this.$store.state.query = param;
                 this.getSearchData()
-            }
+            },
         },
         methods: {
-            focusOut() {
-                this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""));
-                // Ensure that it is not NaN. If so, initialize it to zero.
-                // This happens if user provides a blank input or non-numeric input like "abc"
-                if (isNaN(this.currencyValue)) {
-                    this.currencyValue = 0
-                }
-                // Format display value based on calculated currencyValue
-                this.formattedCurrencyValue = this.currencyValue.toFixed().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
-            },
-            focusIn() {
-                // Unformat display value before user starts modifying it
-                this.formattedCurrencyValue = this.currencyValue.toString()
-            },
+            // focusOut() {
+            //     this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""));
+            //     // Ensure that it is not NaN. If so, initialize it to zero.
+            //     // This happens if user provides a blank input or non-numeric input like "abc"
+            //     if (isNaN(this.currencyValue)) {
+            //         this.currencyValue = 0
+            //     }
+            //     // Format display value based on calculated currencyValue
+            //     this.formattedCurrencyValue = this.currencyValue.toFixed().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+            // },
+            // focusIn() {
+            //     // Unformat display value before user starts modifying it
+            //     this.formattedCurrencyValue = this.currencyValue.toString()
+            // },
             getItemData() {
                 if (this.$store.state.items.length === 0) {
-                    this.$store.dispatch('getItems');
-                    console.log(this.$store.state.items)
+                    this.$store.dispatch('getItems', 20);
                 }
             },
             getSearchData() {
                 this.$store.dispatch('getItems');
             },
-
+            postAdd() {
+                this.form.image = this.$refs.form_image.files[0];
+                this.$store.dispatch('postItem', this.form);
+                this.showModal = false;
+                this.form = {
+                    name: '',
+                    price: '',
+                    count: '',
+                    percent: '',
+                    min_percent: '',
+                    description: '',
+                    image: '',
+                };
+                this.$refs.main_form.reset();
+            }
         },
         created() {
             this.getItemData();
-        }
+        },
     }
 </script>
 
