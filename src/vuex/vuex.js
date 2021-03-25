@@ -9,6 +9,7 @@ const store = createStore({
             items: [],
             itemListOffset: 0,
             query: "",
+            activeItem: {}
         }
     },
     actions: {
@@ -24,7 +25,6 @@ const store = createStore({
                     }
                 });
         },
-
 
     },
     mutations: {
