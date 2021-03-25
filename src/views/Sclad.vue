@@ -10,18 +10,19 @@
                     </div>
                     <div class="creative">
                         <div class="search">
-                            <input type="text" placeholder="Поиск" v-model="query" >
+                            <input type="text" placeholder="Поиск" v-model="query">
                             <div class="btn_block">
                                 <div class="add_input_btn">
-                                    <div class="search_btn" @click="getSearchData"><i class="far fa-search"></i> Поиск</div>
+                                    <div class="search_btn" @click="getSearchData"><i class="far fa-search"></i> Поиск
+                                    </div>
                                 </div>
                                 <div class="add">
                                     <div class="add_input_btn" @click="showModal=true">
-                                            <div class="add_input_btn">
-                                                <div class="add_btn"><i class="fas fa-plus"></i>
-                                                    <span> Добавить товар</span>
-                                                </div>
+                                        <div class="add_input_btn">
+                                            <div class="add_btn"><i class="fas fa-plus"></i>
+                                                <span> Добавить товар</span>
                                             </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -37,13 +38,12 @@
                         <div class="table_cont">
                             <table class="table">
                                 <thead>
-                                <tr class="table_row fix" >
+                                <tr class="table_row fix">
                                     <th class="table_data br">Номер</th>
                                     <th class="table_data">Наименование</th>
                                     <th class="table_data">Цена</th>
                                     <th class="table_data">Количество</th>
                                     <th class="table_data">Изменить</th>
-                                    <!--<th class="table_data br">Удалить</th>-->
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -55,9 +55,9 @@
                                     <td class="table_data">
                                         <button class="change"><i class="fas fa-pencil-alt"></i></button>
                                     </td>
-                                   <!-- <td class="table_data">
-                                        <button class="remove"><i class="fas fa-trash-alt"></i></button>
-                                    </td>-->
+                                    <!-- <td class="table_data">
+                                         <button class="remove"><i class="fas fa-trash-alt"></i></button>
+                                     </td>-->
                                 </tr>
                                 </tbody>
                             </table>
@@ -87,31 +87,35 @@
                     </div>
                     <div class="modal-body">
                         <slot name="body">
-                            <div>
+                            <form>
                                 <div class="input_add" id="vue">
-                                    <input type="text" name="name" id="name" placeholder="Введите название">
-                                    <input type="text" inputmode="decimal" v-model="formattedCurrencyValue"
+                                    <input type="text" name="name" id="name" placeholder="Введите название"
+                                           v-model="form.name">
+                                    <input type="text" v-model="form.price"
                                            @blur="focusOut" @focus="focusIn" name="price" id="price"
-                                           placeholder="Введите Цена">
+                                           placeholder="Введите Цену">
                                 </div>
                                 <div class="input_add">
-                                    <input type="number" min="0"  name="count" id="count" placeholder="Введите колличество">
-                                    <input type="number" min="0" max="100" name="percent" id="percent"
-                                           placeholder="Введите процент наценки">
+                                    <input type="number" min="0" name="count" id="count"
+                                           v-model="form.count" placeholder="Введите колличество">
+                                    <input type="number" min="0" name="percent" id="percent"
+                                           placeholder="Введите процент наценки" v-model="form.percent">
                                 </div>
                                 <div class="input_add">
-                                    <input type="file" name="img" id="img">
-                                    <input type="number" min="0" max="100" name="minValue" id="minValue"
+                                    <input type="file" ref="file" name="file" id="file">
+                                    <input type="number" min="0"  name="min_percent" id="min_percent"
+                                           v-model="form.min_percent"
                                            placeholder="Введите минимальную наценку">
                                 </div>
 
                                 <div class="input_add">
-                                    <textarea type="text" class="textarea" name="disc" id="disc" placeholder="Введите описание"></textarea>
+                                    <textarea type="text" class="textarea" name="desc" id="desc"
+                                              placeholder="Введите описание" v-model="form.desc"></textarea>
                                 </div>
                                 <div style="margin-left: auto">
-                                    <button class="modal-send-btn">+ Добавить</button>
+                                    <button class="modal-send-btn" @click="postItem">+ Добавить</button>
                                 </div>
-                            </div>
+                            </form>
                         </slot>
                     </div>
                 </div>
@@ -122,6 +126,7 @@
 
 
 <script>
+
     export default {
         name: "Sclad",
         data() {
@@ -130,25 +135,57 @@
                 currencyValue: '',
                 formattedCurrencyValue: "",
                 query: "",
+                formData: "",
+                form: {
+                    name: "",
+                    price: "",
+                    count: "",
+                    percent: "",
+                    file: '',
+                    min_percent: "",
+                    desc: "",
+                },
             }
         },
         watch: {
             query(param) {
-                this.$store.state.query = param
+                this.$store.state.query = param;
                 this.getSearchData()
             }
         },
         methods: {
+            postItem() {
+                const BASE_URL = "http://192.168.4.69:8000/";
+                this.formData = new FormData();
+                this.formData.append("name", this.form.name);
+                this.formData.append("price", this.form.price);
+                this.formData.append("count", this.form.count);
+                this.formData.append("percent", this.form.percent);
+                this.formData.append("file", this.form.file);
+                this.formData.append("min_percent", this.form.min_percent);
+                this.formData.append("desc", this.form.desc);
+                fetch(`${BASE_URL}item/`, {
+                    method: 'POST',
+                    body: this.formData,
+                })
+                    .then((responseJSON) => {
+                        console.log(responseJSON)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+
+            },
+
             focusOut() {
-                // Recalculate the currencyValue after ignoring "$" and "," in user input
-                this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""))
+                this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""));
                 // Ensure that it is not NaN. If so, initialize it to zero.
                 // This happens if user provides a blank input or non-numeric input like "abc"
                 if (isNaN(this.currencyValue)) {
                     this.currencyValue = 0
                 }
                 // Format display value based on calculated currencyValue
-                this.formattedCurrencyValue = this.currencyValue.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+                this.formattedCurrencyValue = this.currencyValue.toFixed().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
             },
             focusIn() {
                 // Unformat display value before user starts modifying it
@@ -186,6 +223,7 @@
         background: #DCDCDC;
         border-radius: 40px;
     }
+
     .sklad {
         &_wrap {
             margin-top: 20px;
@@ -201,6 +239,7 @@
         display: flex;
         flex-direction: row;
         width: 100%;
+
         & input {
             border-radius: 10px;
             height: 30px;
@@ -300,15 +339,12 @@
     }
 
 
-
     .search_result {
         display: flex;
         justify-content: space-around;
         font-size: 30px;
     }
 
-
-/* ADD STYLE */
     .add {
         padding: 0 40px;
 
@@ -330,7 +366,7 @@
     }
 
 
-    .add_title{
+    .add_title {
         font-size: 30px;
         font-family: sans-serif;
         margin: 20px 0;
@@ -426,7 +462,6 @@
         background: #E9E2E2;
     }
 
-    /* ================== */
 
     .input_add {
         margin-bottom: 20px;
@@ -471,8 +506,6 @@
             background: #c82333;
         }
     }
-
-
 
 
     /* MODAL CSS */
@@ -545,9 +578,10 @@
         font-size: 20px;
         padding: 20px;
         border-radius: 20px;
+        outline: none;
     }
 
-   /* MODAL CSS */
+    /* MODAL CSS */
     .modal-mask {
         position: fixed;
         z-index: 9998;
@@ -580,8 +614,6 @@
     .modal-header {
         display: flex;
     }
-
-
 
 
 </style>
