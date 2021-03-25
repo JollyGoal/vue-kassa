@@ -154,6 +154,29 @@
             }
         },
         methods: {
+            postItem() {
+                const BASE_URL = "http://192.168.4.69:8000/";
+                this.formData = new FormData();
+                this.formData.append("name", this.form.name);
+                this.formData.append("price", this.form.price);
+                this.formData.append("count", this.form.count);
+                this.formData.append("percent", this.form.percent);
+                this.formData.append("file", this.form.file);
+                this.formData.append("min_percent", this.form.min_percent);
+                this.formData.append("desc", this.form.desc);
+                fetch(`${BASE_URL}item/`, {
+                    method: 'POST',
+                    body: this.formData,
+                })
+                    .then((responseJSON) => {
+                        console.log(responseJSON)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+
+            },
+
             focusOut() {
                 this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""));
                 // Ensure that it is not NaN. If so, initialize it to zero.

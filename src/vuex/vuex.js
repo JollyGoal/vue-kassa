@@ -28,6 +28,7 @@ const store = createStore({
                 });
         },
 
+
         getOutcome(store) {
             fetch(`${BASE_URL}out-trans/?ordering=-id&limit=${PAGING_LIMIT}&offset=${store.state.outcomeListOffset}`)
                 .then((response) => {
@@ -100,15 +101,19 @@ const store = createStore({
                     console.log(err)
                 })
         }
+
     },
 
     mutations: {
         setItems(state, items) {
             state.items = items;
         },
+
         // setOutcome(state, out) {
         //     state.outcome = out
         // }
+
+
     },
 });
 

@@ -9,6 +9,7 @@
                         </h1>
                     </div>
                     <div class="exp_list_sum">
+
                         <form class="exp_list_block" @submit.prevent="postOutcome">
                             <input class="exp_list_input" type="text" name="name" id="name" v-model="form.name"
                                    placeholder="Название расхода">
@@ -17,6 +18,14 @@
                             <div class="exp_list_buttons">
                                 <input class="exp_list_buttons_btn" type="submit" value="Добавить">
                             </div>
+
+                        <form class="exp_list_block">
+                                <input class="exp_list_input" type="text" placeholder="Название расхода">
+                                <input class="exp_list_input" type="number" min="0" placeholder="Введите сумму расхода">
+                                <div class="exp_list_buttons">
+                                    <button class="exp_list_buttons_btn"><i class="fas fa-plus"></i> Добавить</button>
+                                </div>
+
                         </form>
                     </div>
                     <div class="exp_list_sum">
@@ -70,6 +79,7 @@
     export default {
         name: "Exp",
         data() {
+
             return {
                 form: {
                     type: "OUTCOME"
@@ -91,6 +101,10 @@
         created() {
             this.getOutcome();
         }
+
+            return {}
+        },
+        methods: {},
     }
 </script>
 
