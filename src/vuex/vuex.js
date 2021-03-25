@@ -11,6 +11,7 @@ const store = createStore({
             query: "",
             outcome: [],
             outcomeListOffset: 0,
+            activeItem: {}
         }
     },
     actions: {
@@ -26,6 +27,7 @@ const store = createStore({
                     }
                 });
         },
+
         getOutcome(store) {
             fetch(`${BASE_URL}out-trans/?ordering=-id&limit=${PAGING_LIMIT}&offset=${store.state.outcomeListOffset}`)
                 .then((response) => {
@@ -57,6 +59,26 @@ const store = createStore({
         //             console.log(err)
         //         })
         //
+
+
+        // getSearch() {
+        //     // store.commit('searchSet', [1, 0]);
+        //     fetch(`${BASE_URL}get-item/?search=${this.query}&limit=20&offset=${
+        //         store.state.offset * 20
+        //     }`)
+        //         .then((res) => res.json())
+        //         .then((data) => {
+        //             if (this.offset === 0) {
+        //                 store.commit('searchSet', this.item = data['results'])
+        //             } else {
+        //                 this.item = this.item.concat(data['results'])
+        //             }
+        //             if (data.count === 0) this.empty = "Ничего не найдено";
+        //             this.offset++;
+        //             console.log(data);
+        //             console.log(this.offset);
+        //         });
+
         // },
         postOutcome(store, form) {
             // this.formData = new FormData();

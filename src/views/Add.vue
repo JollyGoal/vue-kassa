@@ -1,151 +1,102 @@
 <template>
-    <div class="add">
+    <div class="add" style="display: flex; margin-top: 50px;">
         <div class="add_title">
-            Добавление товара
+            Изменение товара
         </div>
-        <div class="wrap">
-            <div class="table_cont">
-                <table class="table">
-                    <thead>
-                    <tr class="table_row fix">
-                        <th class="table_data br">Наименовая</th>
-                        <th class="table_data">Цена</th>
-                        <th class="table_data">Колличество</th>
-                        <th class="table_data">Процент наценки</th>
-                        <th class="table_data">Изображение</th>
-                        <th class="table_data">Минимальная цена</th>
-                        <th class="table_data">Описание</th>
-                        <th class="table_data">Изменить</th>
-                        <th class="table_data br">Удалить</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="table_row">
-                        <td class="table_data">asdsd</td>
-                        <td class="table_data">sdsdsd</td>
-                        <td class="table_data">sdsdsd</td>
-                        <td class="table_data">sdsdsd</td>
-                        <td class="table_data"><img></td>
-                        <td class="table_data">sdsdsdsd</td>
-                        <td class="table_data">asdasdasdasd</td>
-                        <td class="table_data">
-                            <button class="change" @click="showChange=true"><i class="fas fa-pencil-alt"></i> </button>
-                        </td>
-                        <td class="table_data">
-                            <button class="remove"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="add_input_btn">
-            <div class="btn_mod">
-                <div class="btn_mod_mb" @click="showModal=true"><i class="fas fa-plus"></i></div>
-                <div class="btn_mod_text">Добавить товар</div>
-            </div>
+
+        <div class="button_style" style="">
+            <button>Отправить</button>
+            <button class="button_cancel">Отменить</button>
         </div>
     </div>
-    <transition name="modal" v-show="showModal">
-        <div class="modal-mask">
-            <div class="modal-wrapper">
-                <div class="modal-container">
-                    <div class="modal-header">
-                        <slot name="header">
-                            <div>
-                                Заполните поля
-                            </div>
-                        </slot>
-                        <slot name="close">
-                            <div style="margin-left: auto">
-                                <button class="modal-btn" @click="showModal=false"><i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </slot>
-                    </div>
-                    <div class="modal-body">
-                        <slot name="body">
-                            <div>
-                                <div class="input_add" id="vue">
-                                    <input type="text" name="name" id="name" placeholder="Введите название">
-                                    <input type="text" inputmode="decimal" v-model="formattedCurrencyValue"
-                                           @blur="focusOut" @focus="focusIn" name="price" id="price"
-                                           placeholder="Введите Цена">
-                                </div>
-                                <div class="input_add">
-                                    <input type="number" min="0"  name="count" id="count" placeholder="Введите колличество">
-                                    <input type="number" min="0" name="percent" id="percent"
-                                           placeholder="Введите процент наценки">
-                                </div>
-                                <div class="input_add">
-                                    <input type="file" name="img" id="img">
-                                    <input type="number" min="0" name="minValue" id="minValue"
-                                           placeholder="Введите минимальную наценку">
-                                </div>
 
-                                <div class="input_add">
-                                    <textarea type="text" class="textarea" name="disc" id="disc" placeholder="Введите описание"></textarea>
-                                </div>
-                                <div style="margin-left: auto">
-                                    <button class="modal-send-btn">+ Добавить</button>
-                                </div>
-                            </div>
-                        </slot>
-                    </div>
+    <div class="row">
+        <div class="col">
+            <form action="">
+                <div class="item_div">
+                    <div class="item_div_inner"><p>Наименование</p></div>
+                    <div><input type="text" placeholder="Введите название"></div>
                 </div>
-            </div>
-        </div>
-    </transition>
-    <transition name="modal" v-show="showChange">
-        <div class="modal-mask">
-            <div class="modal-wrapper">
-                <div class="modal-container">
-                    <div class="modal-header">
-                        <slot name="header">
-                            <div>
-                              Изменить товар
-                            </div>
-                        </slot>
-                        <slot name="close">
-                            <div style="margin-left: auto">
-                                <button class="modal-btn" @click="showChange=false"><i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </slot>
-                    </div>
-                    <div class="modal-body">
-                        <slot name="body">
-                            <div>
-                                <div class="input_add" id="vue">
-                                    <input type="text" name="name" id="name1" placeholder="Введите название">
-                                    <input type="text" inputmode="decimal" v-model="formattedCurrencyValue"
-                                           @blur="focusOut" @focus="focusIn" name="price" id="price1"
-                                           placeholder="Введите Цена">
-                                </div>
-                                <div class="input_add">
-                                    <input type="number" min="0"  name="count" id="count1" placeholder="Введите колличество">
-                                    <input type="number" min="0" name="percent" id="percent1"
-                                           placeholder="Введите процент наценки">
-                                </div>
-                                <div class="input_add">
-                                    <input type="file" name="img" id="img1">
-                                    <input type="number" min="0" name="minValue" id="minValue1"
-                                           placeholder="Введите минимальную наценку">
-                                </div>
 
-                                <div class="input_add">
-                                    <textarea type="text" class="textarea" name="disc" id="disc1" placeholder="Введите описание"></textarea>
-                                </div>
-                                <div style="margin-left: auto">
-                                    <button class="modal-send-btn">+ Добавить</button>
-                                </div>
-                            </div>
-                        </slot>
-                    </div>
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 200px;"><p>Цена</p></div>
+                    <div><input type="number" placeholder="Введите Цена"></div>
                 </div>
-            </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 130px;"><p>Количество</p></div>
+                    <div><input type="number" placeholder="Введите колличество"></div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 80px;"><p>Процент наценки</p></div>
+                    <div><input type="number" placeholder="Введите процент наценки"></div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 30px;"><p>Минимальный процент <br> наценки</p>
+                    </div>
+                    <div><input type="number" placeholder="Введите минимальную наценку"></div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 150px;"><p> Описание</p></div>
+                    <div><textarea name="" id="" cols="30" rows="5" placeholder="Введите описание"></textarea></div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner"><p> Изображение</p></div>
+                    <div><input type="file"></div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 100px;"><p>Дата добавления</p></div>
+                    <div> 656565665 </div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 250px;"><p>ID</p></div>
+                    <div>654564564564</div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 180px;"><p>Sell price</p></div>
+                    <div>565646545</div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 200px;"><p>Income</p></div>
+                    <div>56456456</div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 180px;"><p>Min price</p></div>
+                    <div>6456465</div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 180px;"><p>Mid Price</p></div>
+                    <div>54161515</div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 150px;"><p>Quantity Self</p></div>
+                    <div>6156165156</div>
+                </div>
+
+                <div class="item_div">
+                    <div class="item_div_inner" style="margin-right: 100px;"><p>Quantity Percent</p></div>
+                    <div>6546456456</div>
+                </div>
+
+                <div class="button_style" style="">
+                    <button>Отправить</button>
+                    <button class="button_cancel">Отменить</button>
+                </div>
+
+            </form>
         </div>
-    </transition>
+    </div>
 </template>
 
 <script>
@@ -153,8 +104,6 @@
         name: "Add",
         data() {
             return {
-                showModal: false,
-                showChange: false,
                 currencyValue: '',
                 formattedCurrencyValue: ""
             }
@@ -178,103 +127,52 @@
 </script>
 
 <style scoped lang="scss">
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 5px;
-    }
-    ::-webkit-scrollbar-track-piece {
-        margin: 0 5px
-    }
-    ::-webkit-scrollbar-thumb:vertical {
-        height: 5px;
-        background: #DCDCDC;
-        border-radius: 40px;
-    }
-    .modal-mask {
-        position: fixed;
-        z-index: 9998;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: table;
-        transition: opacity 0.3s ease;
-    }
-    .modal-wrapper {
-        display: table-cell;
-        vertical-align: middle;
-    }
-    .modal-container {
-        width: 500px;
-        margin: 0px auto;
-        padding: 20px 30px;
-        background-color: #fff;
-        border-radius: 2px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-        transition: all 0.3s ease;
-        font-family: Helvetica, Arial, sans-serif;
-        height: 500px;
-    }
-    .modal-header {
-        display: flex;
-    }
-    .input_add {
-        margin-bottom: 20px;
-        margin-left: 20px;
-        display: flex;
-        & input {
-            margin-right: 10px;
-            width: 100%;
-            padding: 10px 15px;
-            border-radius: 10px;
-            border: 1px solid gray;
-            outline: none;
-        }
-    }
-    .change {
-        padding: 10px 15px;
-        color: white;
-        font-size: 25px;
-        background: #007bff;
-        outline: none;
-        border-radius: 30px;
-        border: none;
-        &:hover {
-            background: #0069d9;
-        }
-    }
-    .add_title{
+    .add_title {
         font-size: 30px;
         font-family: sans-serif;
         margin: 20px 0;
+        margin-right: 30px;
+        padding: 0 40px;
     }
-    .remove {
-        background: #dc3545;
-        padding: 10px 15px;
-        color: white;
-        font-size: 25px;
-        outline: none;
-        border-radius: 30px;
-        border: none;
-        &:hover {
-            background: #c82333;
+
+    .item_div {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding: 5px 0;
+
+        input {
+            border: 1px solid gray;
+            border-radius: 5px;
+            padding: 8px 8px 8px 8px;
+            outline: none;
+        }
+
+        textarea {
+            border: 1px solid gray;
+            border-radius: 5px;
+            outline: none;
+        }
+
+    }
+
+    .item_div_inner {
+        margin-right: 100px;
+        margin-left: 30px;
+
+        p {
+            font-family: sans-serif;
+            font-size: 20px;
+            font-weight: 600;
         }
     }
-    .modal-header h3 {
-        margin-top: 0;
-        color: #42b983;
-    }
-    .modal-body {
-        margin: 20px 0;
-    }
-    .modal-send-btn {
+
+    .button_style button {
         display: inline-block;
         font-weight: 400;
         text-align: center;
         white-space: nowrap;
         vertical-align: middle;
-        user-select: none;
         border: 1px solid transparent;
         padding: .375rem .75rem;
         font-size: 1rem;
@@ -284,128 +182,21 @@
         color: #fff;
         background-color: #28a745;
         outline: none;
+        margin-left: 10px;
+
         &:hover {
-            color: #fff;
-            background-color: #218838;
-            border-color: #1e7e34;
+            background: #1a662f;
         }
     }
-    .modal-btn {
-        color: white;
-        background: #dc3545;
-        outline: none;
+
+    .button_style {
+        margin: 20px;
+    }
+
+    .button_cancel {
+        background: #c82333 !important;
         &:hover {
-            background: #c82333;
+            background-color: #721316 !important;
         }
-    }
-    .modal-default-button {
-        float: right;
-    }
-    .modal-enter {
-        opacity: 0;
-    }
-    .modal-leave-active {
-        opacity: 0;
-    }
-    .modal-enter .modal-container,
-    .modal-leave-active .modal-container {
-        -webkit-transform: scale(1.1);
-        transform: scale(1.1);
-    }
-    .textarea {
-        resize: none;
-        width: 88%;
-        height: 150px;
-        font-size: 20px;
-        padding: 20px;
-        border-radius: 20px;
-        outline: none;
-    }
-    .wrap {
-        display: flex;
-    }
-    .add {
-        padding: 0 40px;
-        &_btn {
-            background: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            color: white;
-            background: #007bff;
-            font-size: 15px;
-            outline: none;
-            cursor: pointer;
-            margin-right: 30px;
-            &:hover {
-                background: #0069d9;
-            }
-        }
-    }
-    .table_cont {
-        overflow-y: scroll;
-        width: 100%;
-        height: 550px;
-        border-radius: 25px;
-    }
-    .br:first-child {
-        border-top-left-radius: 25px;
-    }
-    .br:last-child {
-        border-top-right-radius: 20px;
-    }
-    .fix {
-        width: 100%;
-        position: sticky;
-        height: 65px;
-        border-radius: 20px;
-    }
-    .btn_mod {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        &_mb {
-            width: 19px;
-            padding: 25px 38px 25px 34px;
-            border-radius: 50%;
-            color: white;
-            background: linear-gradient(180deg, #4B1CD1 0%, rgba(25, 6, 79, 0.65) 100%);
-            font-size: 30px;
-            outline: none;
-            cursor: pointer;
-            margin-right: 20px;
-        }
-        &_text {
-            font-size: 30px;
-            font-family: sans-serif;
-        }
-    }
-    .table {
-        border-collapse: collapse;
-        position: relative;
-        width: 100%;
-        &_row:nth-child(even) {
-            background-color: #dddddd;
-        }
-        &_data {
-            border: 1px solid #dddddd;
-            text-align: center;
-            padding: 8px;
-            & img {
-                width: 50px;
-                height: 50px;
-            }
-        }
-        &:last-child {
-            width: 100%;
-        }
-    }
-    .table:first-child .table_row {
-        border-radius: 20px;
-    }
-    th {
-        position: sticky;
-        top: 0;
-        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-        background: #E9E2E2;
     }
 </style>
