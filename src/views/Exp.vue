@@ -23,17 +23,8 @@
                         <div class="exp_list_block">
 
                         </div>
-
                     </div>
                     <div class="exp_list">
-                        <!--<div class="exp_select_block">
-                            <select multiple class="exp_select">
-                                <option class="exp_select_option">Чебурашка</option>
-                                <option class="exp_select_option">Крокодил Гена</option>
-                                <option class="exp_select_option">Шапокляк</option>
-                            </select>
-                        </div>-->
-
                         <div class="table">
                             <div class="table_block">
                                 <table class="table">
@@ -49,10 +40,12 @@
                                         <td class="table_data">{{item.name}}</td>
                                         <td class="table_data">{{item.id}}</td>
                                         <td class="table_data">{{item.sum}}</td>
-                                        <td class="table_data">{{item.pub_date}}</td>
+                                        <td class="table_data">
+                                            {{ ("0" + new Date(item.pub_date).getDate()).substr(-2)}}.{{new Date(item.pub_date).getMonth() }}.{{ new Date(item.pub_date).getFullYear()}}
+                                            {{new Date(item.pub_date).getHours()}}:{{(":"+"0"+new Date(item.pub_date).getMinutes()).substr(-2)}}
+                                        </td>
                                         <td class="table_data">
                                             <button class="exp_list_buttons_rem"><i class="fas fa-trash-alt"></i>
-
                                             </button>
                                         </td>
                                     </tr>
@@ -95,6 +88,7 @@
 </script>
 
 <style scoped lang="scss">
+
     ::-webkit-scrollbar {
         width: 8px;
         height: 5px;
@@ -193,6 +187,7 @@
     .table_block {
         width: 100%;
         height: 400px;
+        font-family: sans-serif;
     }
 
     .table {

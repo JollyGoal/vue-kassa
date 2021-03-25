@@ -58,7 +58,7 @@ const store = createStore({
         //         })
         //
         // },
-        postOutcome(store, form) {
+         /*     postOutcome(store, form) {
             // this.formData = new FormData();
             // this.formData.append("name", form.name);
             // this.formData.append("price", form.price);
@@ -77,7 +77,7 @@ const store = createStore({
                 .catch((err) => {
                     console.log(err)
                 })
-        }
+        }*/
     },
 
     mutations: {
@@ -88,6 +88,7 @@ const store = createStore({
         //     state.outcome = out
         // }
     },
-});
+
+})
 
 export default store
