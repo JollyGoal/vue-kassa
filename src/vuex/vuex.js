@@ -9,6 +9,7 @@ const store = createStore({
             items: [],
             itemListOffset: 0,
             query: "",
+            activeItem: {}
         }
     },
     actions: {
@@ -25,6 +26,8 @@ const store = createStore({
                     }
                 });
         },
+
+
         // getSearch() {
         //     // store.commit('searchSet', [1, 0]);
         //     fetch(`${BASE_URL}get-item/?search=${this.query}&limit=20&offset=${
