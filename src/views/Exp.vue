@@ -9,12 +9,14 @@
                         </h1>
                     </div>
                     <div class="exp_list_sum">
-                        <form class="exp_list_block">
-                                <input class="exp_list_input" type="text" placeholder="Название расхода">
-                                <input class="exp_list_input" type="number" min="0" placeholder="Введите сумму расхода">
-                                <div class="exp_list_buttons">
-                                    <button class="exp_list_buttons_btn"><i class="fas fa-plus"></i> Добавить</button>
-                                </div>
+                        <form class="exp_list_block" @submit.prevent="postOutcome">
+                            <input class="exp_list_input" type="text" name="name" id="name" v-model="form.name"
+                                   placeholder="Название расхода">
+                            <input class="exp_list_input" type="number" name="sum" id="sum" v-model="form.sum"
+                                   min="0" placeholder="Введите сумму расхода">
+                            <div class="exp_list_buttons">
+                                <input class="exp_list_buttons_btn" type="submit" value="Добавить">
+                            </div>
                         </form>
                     </div>
                     <div class="exp_list_sum">
@@ -43,14 +45,14 @@
                                         <th class="table_data">Удалить</th>
                                     </tr>
 
-                                    <tr class="table_row">
-                                        <td class="table_data">asd</td>
-                                        <td class="table_data">asd</td>
-                                        <td class="table_data">asd</td>
-                                        <td class="table_data">asd</td>
+                                    <tr class="table_row" v-for="(item, index) in $store.state.outcome" :key="index">
+                                        <td class="table_data">{{item.name}}</td>
+                                        <td class="table_data">{{item.id}}</td>
+                                        <td class="table_data">{{item.sum}}</td>
+                                        <td class="table_data">{{item.pub_date}}</td>
                                         <td class="table_data">
                                             <button class="exp_list_buttons_rem"><i class="fas fa-trash-alt"></i>
-                                                Удалить
+
                                             </button>
                                         </td>
                                     </tr>
@@ -68,9 +70,27 @@
     export default {
         name: "Exp",
         data() {
-            return {}
+            return {
+                form: {
+                    type: "OUTCOME"
+                },
+
+            }
         },
-        methods: {},
+        methods: {
+            postOutcome() {
+                this.$store.dispatch('postOutcome', this.form)
+                return false;
+            },
+            getOutcome() {
+                if (this.$store.state.outcome.length === 0) {
+                    this.$store.dispatch('getOutcome');
+                }
+            }
+        },
+        created() {
+            this.getOutcome();
+        }
     }
 </script>
 
