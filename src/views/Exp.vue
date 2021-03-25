@@ -9,29 +9,22 @@
                         </h1>
                     </div>
                     <div class="exp_list_sum">
-                        <form class="exp_list_block">
-                                <input class="exp_list_input" type="text" placeholder="Название расхода">
-                                <input class="exp_list_input" type="number" min="0" placeholder="Введите сумму расхода">
-                                <div class="exp_list_buttons">
-                                    <button class="exp_list_buttons_btn"><i class="fas fa-plus"></i> Добавить</button>
-                                </div>
+                        <form class="exp_list_block" @submit.prevent="postOutcome">
+                            <input class="exp_list_input" type="text" name="name" id="name" v-model="form.name"
+                                   placeholder="Название расхода">
+                            <input class="exp_list_input" type="number" name="sum" id="sum" v-model="form.sum"
+                                   min="0" placeholder="Введите сумму расхода">
+                            <div class="exp_list_buttons">
+                                <input class="exp_list_buttons_btn" type="submit" value="Добавить">
+                            </div>
                         </form>
                     </div>
                     <div class="exp_list_sum">
                         <div class="exp_list_block">
 
                         </div>
-
                     </div>
                     <div class="exp_list">
-                        <!--<div class="exp_select_block">
-                            <select multiple class="exp_select">
-                                <option class="exp_select_option">Чебурашка</option>
-                                <option class="exp_select_option">Крокодил Гена</option>
-                                <option class="exp_select_option">Шапокляк</option>
-                            </select>
-                        </div>-->
-
                         <div class="table">
                             <div class="table_block">
                                 <table class="table">
@@ -43,14 +36,16 @@
                                         <th class="table_data">Удалить</th>
                                     </tr>
 
-                                    <tr class="table_row">
-                                        <td class="table_data">asd</td>
-                                        <td class="table_data">asd</td>
-                                        <td class="table_data">asd</td>
-                                        <td class="table_data">asd</td>
+                                    <tr class="table_row" v-for="(item, index) in $store.state.outcome" :key="index">
+                                        <td class="table_data">{{item.name}}</td>
+                                        <td class="table_data">{{item.id}}</td>
+                                        <td class="table_data">{{item.sum}}</td>
+                                        <td class="table_data">
+                                            {{ ("0" + new Date(item.pub_date).getDate()).substr(-2)}}.{{new Date(item.pub_date).getMonth() }}.{{ new Date(item.pub_date).getFullYear()}}
+                                            {{new Date(item.pub_date).getHours()}}:{{(":"+"0"+new Date(item.pub_date).getMinutes()).substr(-2)}}
+                                        </td>
                                         <td class="table_data">
                                             <button class="exp_list_buttons_rem"><i class="fas fa-trash-alt"></i>
-                                                Удалить
                                             </button>
                                         </td>
                                     </tr>
@@ -68,13 +63,32 @@
     export default {
         name: "Exp",
         data() {
-            return {}
+            return {
+                form: {
+                    type: "OUTCOME"
+                },
+
+            }
         },
-        methods: {},
+        methods: {
+            postOutcome() {
+                this.$store.dispatch('postOutcome', this.form)
+                return false;
+            },
+            getOutcome() {
+                if (this.$store.state.outcome.length === 0) {
+                    this.$store.dispatch('getOutcome');
+                }
+            }
+        },
+        created() {
+            this.getOutcome();
+        }
     }
 </script>
 
 <style scoped lang="scss">
+
     ::-webkit-scrollbar {
         width: 8px;
         height: 5px;
@@ -173,6 +187,7 @@
     .table_block {
         width: 100%;
         height: 400px;
+        font-family: sans-serif;
     }
 
     .table {
