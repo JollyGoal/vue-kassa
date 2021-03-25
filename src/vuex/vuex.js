@@ -41,7 +41,7 @@ const store = createStore({
                     // store.commit('setOutcome', data)
                 });
         },
-        // postItem(store, form) {
+        //postItem(store, form) {
         //     const BASE_URL = "http://192.168.4.69:8000/";
         //     this.formData = new FormData();
         //     this.formData.append("name", this.form.name);
@@ -63,26 +63,30 @@ const store = createStore({
         //         })
         //
         // },
-         /*     postOutcome(store, form) {
+             postOutcome(store, form) {
             // this.formData = new FormData();
             // this.formData.append("name", form.name);
             // this.formData.append("price", form.price);
             form.sum = parseInt(form.sum)
-            console.log(form)
             fetch(`${BASE_URL}trans/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: form,
+                body: JSON.stringify(form),
             })
+                .then((response) => {
+                    return response.json();
+                })
                 .then((resJSON) => {
-                    console.log(resJSON)
+                    console.log(store.state.outcome)
+                    store.state.outcome.unshift(resJSON)
+                    console.log(store.state.outcome)
                 })
                 .catch((err) => {
                     console.log(err)
                 })
-        }*/
+        }
 
     },
 
@@ -94,7 +98,12 @@ const store = createStore({
         //     state.outcome = out
         // }
     },
+    // getters: {
+    //     outcomeList (state) {
+    //         return state.outcome
+    //     }
+    // }
 
-})
+});
 
 export default store

@@ -19,11 +19,6 @@
                             </div>
                         </form>
                     </div>
-                    <div class="exp_list_sum">
-                        <div class="exp_list_block">
-
-                        </div>
-                    </div>
                     <div class="exp_list">
                         <div class="table">
                             <div class="table_block">
@@ -36,19 +31,24 @@
                                         <th class="table_data">Удалить</th>
                                     </tr>
 
-                                    <tr class="table_row" v-for="(item, index) in $store.state.outcome" :key="index">
-                                        <td class="table_data">{{item.name}}</td>
-                                        <td class="table_data">{{item.id}}</td>
-                                        <td class="table_data">{{item.sum}}</td>
-                                        <td class="table_data">
-                                            {{ ("0" + new Date(item.pub_date).getDate()).substr(-2)}}.{{new Date(item.pub_date).getMonth() }}.{{ new Date(item.pub_date).getFullYear()}}
-                                            {{new Date(item.pub_date).getHours()}}:{{(":"+"0"+new Date(item.pub_date).getMinutes()).substr(-2)}}
-                                        </td>
-                                        <td class="table_data">
-                                            <button class="exp_list_buttons_rem"><i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    <transition-group appear name="listfade">
+                                        <tr class="table_row" v-for="(item, index) in $store.state.outcome" :key="index">
+                                            <td class="table_data">{{item.name}}</td>
+                                            <td class="table_data">{{item.id}}</td>
+                                            <td class="table_data">{{item.sum}}</td>
+                                            <td class="table_data">
+                                                {{ ("0" + new Date(item.pub_date).getDate()).substr(-2)}}.{{new
+                                                Date(item.pub_date).getMonth() }}.{{ new Date(item.pub_date).getFullYear()}}
+                                                {{new Date(item.pub_date).getHours()}}:{{(":"+"0"+new
+                                                Date(item.pub_date).getMinutes()).substr(-2)}}
+                                            </td>
+                                            <td class="table_data">
+                                                <button class="exp_list_buttons_rem" @click="postOutcome"><i
+                                                        class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </transition-group>
                                 </table>
                             </div>
                         </div>
@@ -81,6 +81,11 @@
                 }
             }
         },
+        // computed: {
+        //     outcomeList () {
+        //         return this.$store.state.outcome
+        //     }
+        // },
         created() {
             this.getOutcome();
         }
@@ -205,6 +210,16 @@
             padding: 8px;
             width: 150px;
         }
+    }
+    .listfade-enter-from,
+    .listfade-leave-to {
+        transform: translateY(50%);
+        opacity: 0;
+    }
+
+    .listfade-move {
+        position: absolute;
+        transition: all 1s ease;
     }
 
 </style>
