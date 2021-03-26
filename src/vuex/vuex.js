@@ -1,36 +1,42 @@
 import {createStore} from 'vuex'
 
 const BASE_URL = "http://192.168.4.69:8000/";
-const PAGING_LIMIT = 20;
-
+const PAGING_LIMIT = 20
 const store = createStore({
     state() {
         return {
-            items: [],
+            items: [{id: "Товаров", name: "в базе", price: "не", count: "найдено"}],
             itemListOffset: 0,
+            itemsCount: 2,
             query: "",
-
             outcome: [],
             outcomeListOffset: 0,
-
-            activeItem: {}
+            activeItem: {},
 
         }
     },
     actions: {
         getItems(store) {
-            store.commit('setItems', [{id: "Товаров", name: "в базе", price: "не", count: "найдено"}]);
-            fetch(`${BASE_URL}get-item/?search=${store.state.query}&ordering=id&limit=${PAGING_LIMIT}&offset=${store.state.itemListOffset}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data['results'].length === 0) {
-                        store.commit('setItems', [{id: "Товаров", name: "в базе", price: "не", count: "найдено"}]);
-                    } else {
-                        store.commit('setItems', data['results'])
-                    }
-                });
-        },
+            if (store.state.items.length < store.state.itemsCount) {
+                fetch(`${BASE_URL}get-item/?search=${store.state.query}&ordering=-id&limit=${PAGING_LIMIT}&offset=${store.state.itemListOffset * PAGING_LIMIT}`)
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data['count'] !== 0) {
+                            if (store.state.items.length !== 1 && data.count !== 1) {
+                                for (const i in data['results']) {
+                                    store.state.items.push(data['results'][i])
+                                }
+                            }
+                            else {
+                                store.commit('setItems', data['results'])
+                            }
 
+                            store.state.itemsCount = data.count
+                            store.state.itemListOffset++
+                        }
+                    });
+            }
+        },
         getOutcome(store) {
             fetch(`${BASE_URL}out-trans/?ordering=-id&limit=${PAGING_LIMIT}&offset=${store.state.outcomeListOffset}`)
                 .then((response) => {
@@ -38,63 +44,61 @@ const store = createStore({
                 })
                 .then((data) => {
                     store.state.outcome = data['results']
-                    // store.commit('setOutcome', data)
                 });
         },
-        // postItem(store, form) {
-        //     const BASE_URL = "http://192.168.4.69:8000/";
-        //     this.formData = new FormData();
-        //     this.formData.append("name", this.form.name);
-        //     this.formData.append("price", this.form.price);
-        //     this.formData.append("count", this.form.count);
-        //     this.formData.append("percent", this.form.percent);
-        //     this.formData.append("file", this.form.file);
-        //     this.formData.append("min_percent", this.form.min_percent);
-        //     this.formData.append("desc", this.form.desc);
-        //     fetch(`${BASE_URL}item/`, {
-        //         method: 'POST',
-        //         body: this.formData,
-        //     })
-        //         .then((responseJSON) => {
-        //             console.log(responseJSON)
-        //         })
-        //         .catch((err) => {
-        //             console.log(err)
-        //         })
-        //
-        // },
-         /*     postOutcome(store, form) {
-            // this.formData = new FormData();
-            // this.formData.append("name", form.name);
-            // this.formData.append("price", form.price);
-            form.sum = parseInt(form.sum)
-            console.log(form)
+        postItem(store, form) {
+            this.formData = new FormData();
+            for (const name in form) {
+                this.formData.append(name, form[name]);
+            }
+            fetch(`${BASE_URL}item/`, {
+                method: 'POST',
+                body: this.formData,
+            })
+                .then((response) => {
+                    // return response.json();
+                    if (response.status === 201) return response.json();
+                    else console.log("Че та не тоак")
+                })
+                .then((resJSON) => {
+                    store.state.items.unshift(resJSON)
+                    store.state.itemsCount++
+                    if (store.state.items[store.state.items.length - 1].id === "Товаров") {
+                        store.state.items.pop(-1)
+                    }
+                })
+            // .catch((err) => {
+            //     console.log(err)
+            // })
+        },
+        postOutcome(store, form) {
+            form.sum = parseInt(form.sum);
             fetch(`${BASE_URL}trans/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: form,
+                body: JSON.stringify(form),
             })
+                .then((response) => {
+                    return response.json();
+                })
                 .then((resJSON) => {
-                    console.log(resJSON)
+                    store.state.outcome.unshift(resJSON)
                 })
                 .catch((err) => {
                     console.log(err)
                 })
-        }*/
-
+        }
     },
-
     mutations: {
         setItems(state, items) {
             state.items = items;
         },
-        // setOutcome(state, out) {
-        //     state.outcome = out
-        // }
+
     },
 
-})
+
+});
 
 export default store

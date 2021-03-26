@@ -15,5 +15,14 @@
   }
 </script>
 <style lang="scss">
+  .listfade-enter-from,
+  .listfade-leave-to {
+    transform: translateY(50%);
+    opacity: 0;
+  }
 
+  .listfade-move {
+    position: absolute;
+    transition: all 1s ease;
+  }
 </style>

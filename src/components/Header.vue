@@ -14,7 +14,7 @@
                         </router-link>
                     </div>
                 </div>
-                <div class="header_wrap_cont">
+                <div class="header_wrap_cont" >
                     <div class="header_wrap_cont_btn">
                         <router-link style="text-decoration: none" to="/Sclad">
                             <div class="btn">Cклад</div>
@@ -31,6 +31,7 @@
                         </router-link>
                     </div>
                 </div>
+
             </div>
         </div>
     </header>
@@ -61,14 +62,22 @@
             height: 100%;
         }
     }
+    .header-right {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+    }
 
+    .user-name {
+        margin-right: 30px;
+        font-size: 23px;
+    }
 
     .header {
         font-family: sans-serif;
-
         &_wrap {
             display: flex;
-
             .header_wrap_cont {
                 display: flex;
                 justify-content: center;

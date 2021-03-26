@@ -17,11 +17,9 @@
                                     </div>
                                 </div>
                                 <div class="add">
-                                    <div class="add_input_btn" @click="showModal=true">
-                                        <div class="add_input_btn">
-                                            <div class="add_btn"><i class="fas fa-plus"></i>
-                                                <span> Добавить товар</span>
-                                            </div>
+                                    <div class="add_input_btn">
+                                        <div class="add_btn"><i class="fas fa-plus"></i>
+                                            <span> Добавить товар</span>
                                         </div>
                                     </div>
                                 </div>
@@ -29,39 +27,39 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="add">
-                    <div class="add_title">
-                        Добавление товара
-                    </div>
-                    <div class="wrap">
-                        <div class="table_cont">
-                            <table class="table">
-                                <thead>
-                                <tr class="table_row fix">
-                                    <th class="table_data br">Номер</th>
-                                    <th class="table_data">Наименование</th>
-                                    <th class="table_data">Цена</th>
-                                    <th class="table_data">Количество</th>
-                                    <th class="table_data">Изменить</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="table_row" v-for="(item, index) in $store.state.items" :key="index">
-                                    <td class="table_data">{{item.id}}</td>
-                                    <td class="table_data">{{item.name}}</td>
-                                    <td class="table_data">{{item.price}}</td>
-                                    <td class="table_data">{{item.count}}</td>
-                                    <td class="table_data">
+            <div class="add">
+                <div class="add_title">
+                    Добавление товара
+                </div>
+                <div class="wrap">
+                    <div class="table_cont" @scroll="checkScr" ref="scladScr">
+                        <table class="table">
+                            <thead>
+                            <tr class="table_row fix">
+                                <th class="table_data br">Номер</th>
+                                <th class="table_data">Наименование</th>
+                                <th class="table_data">Цена</th>
+                                <th class="table_data">Количество</th>
+                                <th class="table_data">Изменить</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="table_row" v-for="(item, index) in $store.state.items" :key="index">
+                                <td class="table_data">{{item.id}}</td>
+                                <td class="table_data">{{item.name}}</td>
+                                <td class="table_data">{{item.price}}</td>
+                                <td class="table_data">{{item.count}}</td>
+                                <td class="table_data">
+                                    <router-link to='/add/${id}'>
                                         <button class="change"><i class="fas fa-pencil-alt"></i></button>
-                                    </td>
-                                    <!-- <td class="table_data">
-                                         <button class="remove"><i class="fas fa-trash-alt"></i></button>
-                                     </td>-->
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </router-link>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -87,12 +85,11 @@
                     </div>
                     <div class="modal-body">
                         <slot name="body">
-                            <form>
+                            <form @submit.prevent="postAdd" ref="main_form">
                                 <div class="input_add" id="vue">
                                     <input type="text" name="name" id="name" placeholder="Введите название"
                                            v-model="form.name">
-                                    <input type="text" v-model="form.price"
-                                           @blur="focusOut" @focus="focusIn" name="price" id="price"
+                                    <input type="number" v-model="form.price" name="price" id="price"
                                            placeholder="Введите Цену">
                                 </div>
                                 <div class="input_add">
@@ -102,18 +99,18 @@
                                            placeholder="Введите процент наценки" v-model="form.percent">
                                 </div>
                                 <div class="input_add">
-                                    <input type="file" ref="file" name="file" id="file">
-                                    <input type="number" min="0"  name="min_percent" id="min_percent"
+                                    <input type="file" name="image" ref="form_image">
+                                    <input type="number" min="0" name="min_percent" id="min_percent"
                                            v-model="form.min_percent"
                                            placeholder="Введите минимальную наценку">
                                 </div>
 
                                 <div class="input_add">
-                                    <textarea type="text" class="textarea" name="desc" id="desc"
-                                              placeholder="Введите описание" v-model="form.desc"></textarea>
+                                    <textarea type="text" class="textarea" name="description" id="description"
+                                              placeholder="Введите описание" v-model="form.description"></textarea>
                                 </div>
                                 <div style="margin-left: auto">
-                                    <button class="modal-send-btn" @click="postItem">+ Добавить</button>
+                                    <input class="modal-send-btn" @click="postAdd" value="+ Добавить">
                                 </div>
                             </form>
                         </slot>
@@ -135,53 +132,78 @@
                 currencyValue: '',
                 formattedCurrencyValue: "",
                 query: "",
-                formData: "",
+                scr: true,
                 form: {
-                    name: "",
-                    price: "",
-                    count: "",
-                    percent: "",
-                    file: '',
-                    min_percent: "",
-                    desc: "",
+                    name: '',
+                    price: '',
+                    count: '',
+                    percent: '',
+                    min_percent: '',
+                    description: '',
+                    image: '',
                 },
+
             }
         },
         watch: {
             query(param) {
                 this.$store.state.query = param;
                 this.getSearchData()
-            }
+            },
         },
         methods: {
-            focusOut() {
-                this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""));
-                // Ensure that it is not NaN. If so, initialize it to zero.
-                // This happens if user provides a blank input or non-numeric input like "abc"
-                if (isNaN(this.currencyValue)) {
-                    this.currencyValue = 0
-                }
-                // Format display value based on calculated currencyValue
-                this.formattedCurrencyValue = this.currencyValue.toFixed().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
-            },
-            focusIn() {
-                // Unformat display value before user starts modifying it
-                this.formattedCurrencyValue = this.currencyValue.toString()
-            },
+            // focusOut() {
+            //     this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""));
+            //     // Ensure that it is not NaN. If so, initialize it to zero.
+            //     // This happens if user provides a blank input or non-numeric input like "abc"
+            //     if (isNaN(this.currencyValue)) {
+            //         this.currencyValue = 0
+            //     }
+            //     // Format display value based on calculated currencyValue
+            //     this.formattedCurrencyValue = this.currencyValue.toFixed().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+            // },
+            // focusIn() {
+            //     // Unformat display value before user starts modifying it
+            //     this.formattedCurrencyValue = this.currencyValue.toString()
+            // },
             getItemData() {
-                if (this.$store.state.items.length === 0) {
+                if (this.$store.state.items.length === 1) {
                     this.$store.dispatch('getItems');
-                    console.log(this.$store.state.items)
                 }
             },
             getSearchData() {
                 this.$store.dispatch('getItems');
             },
-
+            postAdd() {
+                this.form.image = this.$refs.form_image.files[0];
+                this.$store.dispatch('postItem', this.form);
+                this.showModal = false;
+                this.form = {
+                    name: '',
+                    price: '',
+                    count: '',
+                    percent: '',
+                    min_percent: '',
+                    description: '',
+                    image: '',
+                };
+                this.$refs.main_form.reset();
+            },
+            checkScr(){
+                this.scr = this.$refs.scladScr.scrollHeight <= this.$refs.scladScr.scrollTop + this.$refs.scladScr.offsetHeight + 140;
+                if (this.scr) {
+                    if (this.fetchTimeout) clearTimeout(this.fetchTimeout);
+                    this.fetchTimeout = setTimeout(() => {
+                        this.$store.dispatch('getItems');
+                    }, 500);
+                }
+            },
         },
         created() {
             this.getItemData();
-        }
+        },
+        unmounted() {
+        },
     }
 </script>
 
@@ -358,7 +380,7 @@
     .table_cont {
         overflow-y: scroll;
         width: 100%;
-        height: 550px;
+        height: 400px;
         border-radius: 25px;
     }
 
