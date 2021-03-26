@@ -31,16 +31,7 @@
                         </router-link>
                     </div>
                 </div>
-                <!--<div class="header_wrap_cont" >
-                    <div class="header-right">
-                        <div class="user-name">user name</div>
-                        <div class="header_wrap_cont_btn">
-                            <router-link style="text-decoration: none" to="/order">
-                                <div class="btn">Заказы</div>
-                            </router-link>
-                        </div>
-                    </div>
-                </div>-->
+
             </div>
         </div>
     </header>
@@ -85,10 +76,8 @@
 
     .header {
         font-family: sans-serif;
-
         &_wrap {
             display: flex;
-
             .header_wrap_cont {
                 display: flex;
                 justify-content: center;

@@ -17,11 +17,9 @@
                                     </div>
                                 </div>
                                 <div class="add">
-                                    <div class="add_input_btn" @click="showModal=true">
-                                        <div class="add_input_btn">
-                                            <div class="add_btn"><i class="fas fa-plus"></i>
-                                                <span> Добавить товар</span>
-                                            </div>
+                                    <div class="add_input_btn">
+                                        <div class="add_btn"><i class="fas fa-plus"></i>
+                                            <span> Добавить товар</span>
                                         </div>
                                     </div>
                                 </div>
@@ -29,41 +27,39 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="add">
-                    <div class="add_title">
-                        Добавление товара
-                    </div>
-                    <div class="wrap">
-                        <div class="table_cont">
-                            <table class="table">
-                                <thead>
-                                <tr class="table_row fix">
-                                    <th class="table_data br">Номер</th>
-                                    <th class="table_data">Наименование</th>
-                                    <th class="table_data">Цена</th>
-                                    <th class="table_data">Количество</th>
-                                    <th class="table_data">Изменить</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="table_row" v-for="(item, index) in $store.state.items" :key="index">
-                                    <td class="table_data">{{item.id}}</td>
-                                    <td class="table_data">{{item.name}}</td>
-                                    <td class="table_data">{{item.price}}</td>
-                                    <td class="table_data">{{item.count}}</td>
-                                    <td class="table_data">
-                                        <router-link to='/add/${id}'>
-                                            <button class="change"><i class="fas fa-pencil-alt"></i></button>
-                                        </router-link>
-                                    </td>
-                                    <!-- <td class="table_data">
-                                         <button class="remove"><i class="fas fa-trash-alt"></i></button>
-                                     </td>-->
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="add">
+                <div class="add_title">
+                    Добавление товара
+                </div>
+                <div class="wrap">
+                    <div class="table_cont" @scroll="checkScr" ref="scladScr">
+                        <table class="table">
+                            <thead>
+                            <tr class="table_row fix">
+                                <th class="table_data br">Номер</th>
+                                <th class="table_data">Наименование</th>
+                                <th class="table_data">Цена</th>
+                                <th class="table_data">Количество</th>
+                                <th class="table_data">Изменить</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="table_row" v-for="(item, index) in $store.state.items" :key="index">
+                                <td class="table_data">{{item.id}}</td>
+                                <td class="table_data">{{item.name}}</td>
+                                <td class="table_data">{{item.price}}</td>
+                                <td class="table_data">{{item.count}}</td>
+                                <td class="table_data">
+                                    <router-link to='/add/${id}'>
+                                        <button class="change"><i class="fas fa-pencil-alt"></i></button>
+                                    </router-link>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -136,6 +132,7 @@
                 currencyValue: '',
                 formattedCurrencyValue: "",
                 query: "",
+                scr: true,
                 form: {
                     name: '',
                     price: '',
@@ -170,8 +167,8 @@
             //     this.formattedCurrencyValue = this.currencyValue.toString()
             // },
             getItemData() {
-                if (this.$store.state.items.length === 0) {
-                    this.$store.dispatch('getItems', 20);
+                if (this.$store.state.items.length === 1) {
+                    this.$store.dispatch('getItems');
                 }
             },
             getSearchData() {
@@ -191,10 +188,21 @@
                     image: '',
                 };
                 this.$refs.main_form.reset();
-            }
+            },
+            checkScr(){
+                this.scr = this.$refs.scladScr.scrollHeight <= this.$refs.scladScr.scrollTop + this.$refs.scladScr.offsetHeight + 140;
+                if (this.scr) {
+                    if (this.fetchTimeout) clearTimeout(this.fetchTimeout);
+                    this.fetchTimeout = setTimeout(() => {
+                        this.$store.dispatch('getItems');
+                    }, 500);
+                }
+            },
         },
         created() {
             this.getItemData();
+        },
+        unmounted() {
         },
     }
 </script>
@@ -372,7 +380,7 @@
     .table_cont {
         overflow-y: scroll;
         width: 100%;
-        height: 550px;
+        height: 400px;
         border-radius: 25px;
     }
 

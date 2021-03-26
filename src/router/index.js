@@ -19,7 +19,7 @@ const routes = [
         component: () => import('../views/Static.vue')
     },
     {
-        path: '/Add',
+        path: '/Add/${id}',
         name: 'Add',
         component: () => import('../views/Add.vue')
     },
