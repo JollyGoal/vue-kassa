@@ -12,8 +12,8 @@ const store = createStore({
             outcome: [],
             outcomeListOffset: 0,
             activeItem: {},
-
         }
+
     },
     actions: {
         getItems(store) {
@@ -67,9 +67,6 @@ const store = createStore({
                         store.state.items.pop(-1)
                     }
                 })
-            // .catch((err) => {
-            //     console.log(err)
-            // })
         },
         postOutcome(store, form) {
             form.sum = parseInt(form.sum);
@@ -89,6 +86,32 @@ const store = createStore({
                 .catch((err) => {
                     console.log(err)
                 })
+        },
+        getUpdateItem(store, id) {
+            fetch(`${BASE_URL}get-item/${id}`)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    store.state.activeItem = data.item;
+                });
+        },
+        postUpdateItem(store, form){
+            this.formData = new FormData();
+            for (const name in form) {
+                this.formData.append(name, form[name]);
+            }
+            fetch(`${BASE_URL}item/`, {
+                method: 'PUT',
+                body: this.formData,
+
+            })
+                .then((response) => {
+                return response.json();
+            })
+                .then((data) => {
+                    store.state.outcome = data['results']
+                });
         }
     },
     mutations: {
