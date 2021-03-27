@@ -22,17 +22,21 @@ const store = createStore({
                     .then((res) => res.json())
                     .then((data) => {
                         if (data['count'] !== 0) {
-                            if (store.state.items.length !== 1 && data.count !== 1) {
+                            if (store.state.items.length !== 1 && data.count !== 1 && store.state.items.length !== 0) {
                                 for (const i in data['results']) {
                                     store.state.items.push(data['results'][i])
                                 }
+                                console.log('ree')
                             }
                             else {
+                                console.log(data)
                                 store.commit('setItems', data['results'])
                             }
 
                             store.state.itemsCount = data.count
                             store.state.itemListOffset++
+                        } else {
+                            store.state.items = [{id: "Товаров", name: "в базе", price: "не", count: "найдено"}]
                         }
                     });
             }
@@ -96,21 +100,20 @@ const store = createStore({
                     store.state.activeItem = data.item;
                 });
         },
-        postUpdateItem(store, form){
+        postUpdateItem(store, options){
             this.formData = new FormData();
-            for (const name in form) {
-                this.formData.append(name, form[name]);
+            for (const name in options.form) {
+                this.formData.append(name, options.form[name]);
             }
-            fetch(`${BASE_URL}item/`, {
+            fetch(`${BASE_URL}update/${options.id}`, {
                 method: 'PUT',
                 body: this.formData,
-
             })
                 .then((response) => {
                 return response.json();
             })
                 .then((data) => {
-                    store.state.outcome = data['results']
+                   console.log(data)
                 });
         }
     },
