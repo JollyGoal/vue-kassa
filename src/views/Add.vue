@@ -3,90 +3,91 @@
         <div class="add_title">
             Изменение товара
         </div>
-
-        <div class="button_style" style="">
-            <button>Отправить</button>
-            <button class="button_cancel">Отменить</button>
-        </div>
     </div>
 
     <div class="row">
         <div class="col">
-            <form action="">
+            <form @submit="postUpdate">
                 <div class="item_div">
                     <div class="item_div_inner"><p>Наименование</p></div>
-                    <div><input type="text" placeholder="Введите название"></div>
+                    <div>
+                        <input type="text" name="name" id="name" placeholder="Введите название" v-model="this.form.name" :value="$store.state.activeItem.name">
+                    </div>
                 </div>
 
                 <div class="item_div">
                     <div class="item_div_inner" style="margin-right: 200px;"><p>Цена</p></div>
-                    <div><input type="number" placeholder="Введите Цена"></div>
+                    <div><input type="number" name="price" id="price" :value="$store.state.activeItem.price" placeholder="Введите Цена"></div>
                 </div>
 
                 <div class="item_div">
                     <div class="item_div_inner" style="margin-right: 130px;"><p>Количество</p></div>
-                    <div><input type="number" placeholder="Введите колличество"></div>
+                    <div><input type="number" name="count" id="count" placeholder="Введите колличество" :value="$store.state.activeItem.count"></div>
                 </div>
 
                 <div class="item_div">
                     <div class="item_div_inner" style="margin-right: 80px;"><p>Процент наценки</p></div>
-                    <div><input type="number" placeholder="Введите процент наценки"></div>
+                    <div><input type="number" name="percent" id="percent" placeholder="Введите процент наценки" :value="$store.state.activeItem.percent"></div>
                 </div>
 
                 <div class="item_div">
                     <div class="item_div_inner" style="margin-right: 30px;"><p>Минимальный процент <br> наценки</p>
                     </div>
-                    <div><input type="number" placeholder="Введите минимальную наценку"></div>
+                    <div><input type="number" name="min_percent" id="min_percent"
+                                placeholder="Введите минимальную наценку" :value="$store.state.activeItem.min_percent"></div>
                 </div>
 
                 <div class="item_div">
                     <div class="item_div_inner" style="margin-right: 150px;"><p> Описание</p></div>
-                    <div><textarea name="" id="" cols="30" rows="5" placeholder="Введите описание"></textarea></div>
+                    <div><textarea class="text" name="description" id="description" placeholder="Введите описание" :value="$store.state.activeItem.description"></textarea></div>
                 </div>
 
                 <div class="item_div">
                     <div class="item_div_inner"><p> Изображение</p></div>
-                    <div><input type="file"></div>
+                    <div><input type="file" name="image" id="image" ref="chgImg"> </div>
                 </div>
 
                 <div class="item_div">
                     <div class="item_div_inner" style="margin-right: 100px;"><p>Дата добавления</p></div>
-                    <div> 656565665 </div>
+                    <div> {{("0" + new Date($store.state.activeItem.pub_date).getDate()).substr(-2)}}.{{
+                        new Date($store.state.activeItem.pub_date).getMonth() }}.{{ new Date($store.state.activeItem.pub_date).getFullYear()}}
+                        {{new Date($store.state.activeItem.pub_date).getHours()}}:{{(":"+"0"+new
+                        Date($store.state.activeItem.pub_date).getMinutes()).substr(-2)}}</div>
                 </div>
 
                 <div class="item_div">
                     <div class="item_div_inner" style="margin-right: 250px;"><p>ID</p></div>
-                    <div>654564564564</div>
+                    <div>{{$store.state.activeItem.id}}</div>
                 </div>
 
                 <div class="item_div">
-                    <div class="item_div_inner" style="margin-right: 180px;"><p>Sell price</p></div>
-                    <div>565646545</div>
+                    <div class="item_div_inner" style="margin-right: 180px;"><p>Цена продажи</p></div>
+                    <div>{{$store.state.activeItem.max_price}}</div>
                 </div>
 
                 <div class="item_div">
-                    <div class="item_div_inner" style="margin-right: 200px;"><p>Income</p></div>
-                    <div>56456456</div>
+                    <div class="item_div_inner" style="margin-right: 200px;"><p>Прибыль с одного</p></div>
+                    <div>{{$store.state.activeItem.income}}</div>
                 </div>
 
                 <div class="item_div">
-                    <div class="item_div_inner" style="margin-right: 180px;"><p>Min price</p></div>
-                    <div>6456465</div>
+                    <div class="item_div_inner" style="margin-right: 180px;"><p>Минимальная цена</p></div>
+                    <div>{{$store.state.activeItem.min_price}}</div>
                 </div>
 
                 <div class="item_div">
-                    <div class="item_div_inner" style="margin-right: 180px;"><p>Mid Price</p></div>
-                    <div>54161515</div>
+                    <div class="item_div_inner" style="margin-right: 180px;"><p>Средняя цена</p></div>
+                    <div>{{$store.state.activeItem.mid_price}}</div>
                 </div>
 
                 <div class="item_div">
-                    <div class="item_div_inner" style="margin-right: 150px;"><p>Quantity Self</p></div>
-                    <div>6156165156</div>
+                    <div class="item_div_inner" style="margin-right: 150px;"><p>Общая сумма :</p></div>
+                    <div>{{$store.state.activeItem.quantity_self}}</div>
                 </div>
 
                 <div class="item_div">
-                    <div class="item_div_inner" style="margin-right: 100px;"><p>Quantity Percent</p></div>
-                    <div>6546456456</div>
+                    <div class="item_div_inner" style="margin-right: 100px;"><p>Общая сумма с процентом :</p></div>
+                    <div>{{$store.state.activeItem.quantity_percent}}</div>
                 </div>
 
                 <div class="button_style" style="">
@@ -102,31 +103,47 @@
 <script>
     export default {
         name: "Add",
+        props: ['id'],
         data() {
             return {
                 currencyValue: '',
                 formattedCurrencyValue: ""
             }
         },
+        watch: {},
         methods: {
-            focusOut() {
-                this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""))
-                if (isNaN(this.currencyValue)) {
-                    this.currencyValue = 0
-                }
-                // Format display value based on calculated currencyValue
-                this.formattedCurrencyValue = this.currencyValue.toFixed().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+            /*           focusOut() {
+                           this.currencyValue = parseFloat(this.formattedCurrencyValue.replace(/[^\d.]/g, ""))
+                           if (isNaN(this.currencyValue)) {
+                               this.currencyValue = 0
+                           }
+                           // Format display value based on calculated currencyValue
+                           this.formattedCurrencyValue = this.currencyValue.toFixed().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+                       },
+                       focusIn() {
+                           // Unformat display value before user starts modifying it
+                           this.formattedCurrencyValue = this.currencyValue.toString()
+                       },*/
+            getUpdate() {
+                this.$store.dispatch('getUpdateItem', this.id)
             },
-            focusIn() {
-                // Unformat display value before user starts modifying it
-                this.formattedCurrencyValue = this.currencyValue.toString()
-            },
+            postUpdate() {
+                this.store.dispatch('postUpdateItem', this.form)
+            }
         },
+        created() {
+            this.getUpdate(this.id)
+        }
 
     }
 </script>
 
 <style scoped lang="scss">
+    .img_desc{
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+    }
     .add_title {
         font-size: 30px;
         font-family: sans-serif;
@@ -134,7 +151,15 @@
         margin-right: 30px;
         padding: 0 40px;
     }
-
+    .text{
+        resize: none;
+        width: 88%;
+        height: 150px;
+        font-size: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        outline: none;
+    }
     .item_div {
         display: flex;
         align-items: center;
@@ -195,6 +220,7 @@
 
     .button_cancel {
         background: #c82333 !important;
+
         &:hover {
             background-color: #721316 !important;
         }

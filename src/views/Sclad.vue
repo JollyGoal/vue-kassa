@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="add">
                                     <div class="add_input_btn">
-                                        <div class="add_btn"><i class="fas fa-plus"></i>
+                                        <div class="add_btn" @click="showModal=true"><i class="fas fa-plus"></i>
                                             <span> Добавить товар</span>
                                         </div>
                                     </div>
@@ -52,10 +52,7 @@
                                 <td class="table_data">{{item.price}}</td>
                                 <td class="table_data">{{item.count}}</td>
                                 <td class="table_data">
-                                    <router-link to='/add/${id}'>
-                                        <button class="change"><i class="fas fa-pencil-alt"></i></button>
-                                    </router-link>
-                                </td>
+                                        <button @click="routerHandler(`/Add/${item.id}`)"  class="change"><i class="fas fa-pencil-alt"></i></button></td>
 
                             </tr>
                             </tbody>
@@ -145,6 +142,7 @@
 
             }
         },
+
         watch: {
             query(param) {
                 this.$store.state.query = param;
@@ -198,11 +196,13 @@
                     }, 500);
                 }
             },
+            routerHandler(route) {
+                this.$router.push(route);
+
+            },
         },
         created() {
             this.getItemData();
-        },
-        unmounted() {
         },
     }
 </script>
