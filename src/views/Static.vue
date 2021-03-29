@@ -46,14 +46,14 @@
 
                 <div class="row second__row">
                     <div class="col">
-                        <input type="date" name="dateofbirth" id="dateofbirth" class="mb date_input">
+                        <input type="date" v-model="date.from" name="dateStart" ref="dateStart" class="mb date_input">
                     </div>
                     <div class="col second__row__second__col">
-                        <input type="date" name="dateofbirth" id="dateofbirth1" class="mb date_input">
+                        <input type="date" name="dateEnd" v-model="date.to" ref="dateEnd" class="mb date_input">
                     </div>
 
                     <div class="col">
-                        <button class="submit"><i class="fas fa-search"></i> Поиск</button>
+                        <div class="submit" @click="getDataSearch"><i class="fas fa-search"></i> Поиск</div>
                     </div>
                     <div class="col">
                         <button class="submit"><i class="fas fa-sliders-h"></i> Фильтр
@@ -65,25 +65,27 @@
                     <div class="col first__column" style="width: 80%; height:  343px; margin-right: 10px;">
                         <table style="width: 100%;">
                             <tr>
-                                <th>-</th>
-                                <th>ID:</th>
-                                <th style="padding: 10px 50px;">Категория:</th>
+                                <th>Категория</th>
+                                <th>Номер:</th>
+                                <th>Наименование:</th>
                                 <th>Сумма:</th>
                                 <th>Дата:</th>
                             </tr>
-                            <tr v-for="(item , index) in list" :key="index">
-
-                                <td></td>
-                                <td></td>
+                            <tr v-for="(item , index) in $store.state.trans" :key="index">
+                                <td>{{item.type}}</td>
+                                <td>{{item.id}}</td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.sum}}</td>
-                                <td>{{item.date}}</td>
+                                <td>
+                                    {{new Date(item.pub_date).getFullYear()}}.
+                                    {{ new Date(item.pub_date).getMonth()+1}}.
+                                    {{("0" + new Date(item.pub_date).getDate()).substr(-2)}}
 
+
+                                </td>
                             </tr>
                         </table>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -92,214 +94,38 @@
 
 <script>
     export default {
+    //:value="prev_date.toISOString().substr(0,10)"
+    //:value="new Date().toISOString().substr(0,10)"
         name: "Static",
         data() {
             return {
                 list: [
-                    {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    },
-                    {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    },
-                    {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    },
-                    {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    }, {
-                        name: "qweqwe",
-                        date: "qweqwe",
-                        sum: "qweqwe",
-
-                    },
-
-
                 ],
+                prev_date: new Date(),
+                date:{
+                    from: (new Date().setMonth((new Date()).getMonth() - 1)),
+                    to:new Date().toISOString().substr(0,10),
+                }
             }
         },
+        watch: {
+
+        },
+        methods:{
+            getTrans(){
+                this.$store.dispatch('getTransactions', this.date)
+            },
+           getDataSearch() {
+                this.$store.dispatch('getTransactions', this.date);
+            },
+        },
+        created(){
+            this.date.from = new Date(this.date.from).toISOString().substr(0,10)
+            this.getTrans();
+
+
+        },
+
     }
 </script>
 
