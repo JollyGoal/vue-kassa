@@ -1,17 +1,24 @@
 import {createStore} from 'vuex'
 
-const BASE_URL = "http://192.168.4.69:8000/";
+const BASE_URL = "http://192.168.4.135:8000/";
 const PAGING_LIMIT = 20
 const store = createStore({
     state() {
         return {
             items: [{id: "Товаров", name: "в базе", price: "не", count: "найдено"}],
             itemListOffset: 0,
+            trans_limit: 20,
+            trans_offset: 0,
             itemsCount: 2,
             query: "",
             outcome: [],
             outcomeListOffset: 0,
             activeItem: {},
+            trans: [],
+            date:{
+                from:'',
+                to:'',
+            }
         }
 
     },
@@ -33,7 +40,7 @@ const store = createStore({
                                 store.commit('setItems', data['results'])
                             }
 
-                            store.state.itemsCount = data.count
+                            store.state.itemsCount = data.count;
                             store.state.itemListOffset++
                         } else {
                             store.state.items = [{id: "Товаров", name: "в базе", price: "не", count: "найдено"}]
@@ -115,14 +122,44 @@ const store = createStore({
                 .then((data) => {
                    console.log(data)
                 });
-        }
+        },
+        getTransactions(store, date){
+            console.log(`${BASE_URL}get-trans/?from=${date.from}&to=${date.to}&ordering=-id`)
+            fetch(`${BASE_URL}get-trans/?from=${date.from}&to=${date.to}&ordering=-id`)
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    store.state.trans=data;
+                    console.log(data)
+                });
+        },
     },
+
     mutations: {
         setItems(state, items) {
             state.items = items;
         },
 
+
     },
+
+    getters:{
+        incomeFinal (state) {
+            let final = 0
+            for (const i of state.trans.filter(item => item.type === "INCOME")) {
+                final += i.sum
+            }
+            return final
+        },
+        outcomeFinal (state) {
+            let final = 0;
+            for (const i of state.trans.filter(item => item.type === "OUTCOME")) {
+                final += i.sum
+            }
+            return final
+        },
+    }
 
 
 });
