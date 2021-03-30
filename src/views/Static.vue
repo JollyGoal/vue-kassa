@@ -10,7 +10,7 @@
                                     <div>Доход</div>
                                 </div>
                                 <div class="count_title">
-                                    <span>55555</span>
+                                    <span>{{income}}</span>
                                 </div>
                             </div>
                         </div>
@@ -20,10 +20,10 @@
                         <div class="count">
                             <div class="count_body">
                                 <div class="count_head">
-                                    <div>Расход</div>
+                                    <div>Прибыль</div>
                                 </div>
                                 <div class="count_title">
-                                    <span>5555555</span>
+                                    <span>{{income - outcome}}</span>
                                 </div>
 
                             </div>
@@ -34,10 +34,10 @@
                         <div class="count third__count">
                             <div class="count_body">
                                 <div class="count_head">
-                                    <div>Прибыль</div>
+                                    <div>Расход</div>
                                 </div>
                                 <div class="count_title">
-                                    <span>55555</span>
+                                    <span>{{outcome}}</span>
                                 </div>
                             </div>
                         </div>
@@ -56,8 +56,7 @@
                         <div class="submit" @click="getDataSearch"><i class="fas fa-search"></i> Поиск</div>
                     </div>
                     <div class="col">
-                        <button class="submit"><i class="fas fa-sliders-h"></i> Фильтр
-                        </button>
+                        <button class="submit" @click="changeType"><i class="fas fa-sliders-h"></i> Фильтр </button>
                     </div>
                 </div>
 
@@ -93,6 +92,8 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
     //:value="prev_date.toISOString().substr(0,10)"
     //:value="new Date().toISOString().substr(0,10)"
@@ -105,11 +106,17 @@
                 date:{
                     from: (new Date().setMonth((new Date()).getMonth() - 1)),
                     to:new Date().toISOString().substr(0,10),
-                }
+                },
             }
         },
         watch: {
 
+        },
+        computed: {
+            ...mapGetters({
+                income: 'incomeFinal',
+                outcome: 'outcomeFinal',
+            })
         },
         methods:{
             getTrans(){
@@ -122,9 +129,8 @@
         created(){
             this.date.from = new Date(this.date.from).toISOString().substr(0,10)
             this.getTrans();
-
-
         },
+
 
     }
 </script>

@@ -1,6 +1,6 @@
 import {createStore} from 'vuex'
 
-const BASE_URL = "http://192.168.4.69:8000/";
+const BASE_URL = "http://192.168.4.135:8000/";
 const PAGING_LIMIT = 20
 const store = createStore({
     state() {
@@ -14,7 +14,7 @@ const store = createStore({
             outcome: [],
             outcomeListOffset: 0,
             activeItem: {},
-            trans:[],
+            trans: [],
             date:{
                 from:'',
                 to:'',
@@ -143,6 +143,23 @@ const store = createStore({
 
 
     },
+
+    getters:{
+        incomeFinal (state) {
+            let final = 0
+            for (const i of state.trans.filter(item => item.type === "INCOME")) {
+                final += i.sum
+            }
+            return final
+        },
+        outcomeFinal (state) {
+            let final = 0;
+            for (const i of state.trans.filter(item => item.type === "OUTCOME")) {
+                final += i.sum
+            }
+            return final
+        },
+    }
 
 
 });
