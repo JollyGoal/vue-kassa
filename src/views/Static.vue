@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="col">
-                        <div class="submit" @click="getDataSearch"><i class="fas fa-search"></i> Поиск</div>
+                        <div class="submit" @click="getTrans"><i class="fas fa-search"></i> Поиск</div>
                     </div>
                     <div class="col">
                         <button class="submit" @click="changeType"><i class="fas fa-sliders-h"></i> Фильтр </button>
@@ -70,7 +70,7 @@
                                 <th>Сумма:</th>
                                 <th>Дата:</th>
                             </tr>
-                            <tr v-for="(item , index) in $store.state.trans" :key="index">
+                            <tr v-for="(item , index) in transactionsFiltered" :key="index">
                                 <td>{{item.type}}</td>
                                 <td>{{item.id}}</td>
                                 <td>{{item.name}}</td>
@@ -116,15 +116,29 @@
             ...mapGetters({
                 income: 'incomeFinal',
                 outcome: 'outcomeFinal',
+                transactionsFiltered: 'transactionsFiltered',
             })
         },
         methods:{
             getTrans(){
                 this.$store.dispatch('getTransactions', this.date)
             },
-           getDataSearch() {
-                this.$store.dispatch('getTransactions', this.date);
-            },
+            changeType() {
+                switch (this.$store.state.type) {
+                    case 'OUTCOME': {
+                        this.$store.state.type = ""
+                        break;
+                    }
+                    case  "INCOME": {
+                        this.$store.state.type = "OUTCOME"
+                        break
+                    }
+                    case "": {
+                        this.$store.state.type = "INCOME"
+                        break
+                    }
+                }
+            }
         },
         created(){
             this.date.from = new Date(this.date.from).toISOString().substr(0,10)

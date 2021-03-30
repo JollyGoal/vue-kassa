@@ -31,7 +31,32 @@
                         </router-link>
                     </div>
                 </div>
+            </div>
 
+            <div class="header_wrap" >
+                <div class="header_wrap_cont_s">
+                    <router-link style="text-decoration: none" to="/">
+                        <div class="logo">
+                            <img src="../assets/logo.png" alt="">
+                        </div>
+                    </router-link>
+                    <div class="header_wrap_cont_btn_d">
+                        <router-link style="text-decoration: none" to="/">
+                            <div class="btn_exit"><i class="fas fa-sign-out-alt"></i></div>
+                        </router-link>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="user-name">Жорик Вася</div>
+                    <div class="header_wrap_cont_btn">
+                        <router-link style="text-decoration: none" to="/order">
+                            <div class="btn">Заказы</div>
+                        </router-link>
+                        <router-link style="text-decoration: none" to="/user">
+                            <div class="btn">Касса</div>
+                        </router-link>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -41,14 +66,12 @@
     export default {
         name: "Header",
         props: {},
-        data(){
-            return{
+        data() {
+            return {
 
             }
         },
-        method:{
-
-        },
+        method: {},
     }
 </script>
 
@@ -62,6 +85,7 @@
             height: 100%;
         }
     }
+
     .header-right {
         display: flex;
         justify-content: flex-end;
@@ -76,8 +100,10 @@
 
     .header {
         font-family: sans-serif;
+
         &_wrap {
             display: flex;
+
             .header_wrap_cont {
                 display: flex;
                 justify-content: center;
@@ -147,5 +173,17 @@
         &:hover {
             transform: scale(1.2);
         }
+    }
+
+    .header-right {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+    }
+
+    .user-name {
+        margin-right: 30px;
+        font-size: 23px;
     }
 </style>

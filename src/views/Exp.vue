@@ -38,12 +38,12 @@
                                             <td class="table_data">{{item.sum}}</td>
                                             <td class="table_data">
                                                 {{ ("0" + new Date(item.pub_date).getDate()).substr(-2)}}.{{new
-                                                Date(item.pub_date).getMonth() }}.{{ new Date(item.pub_date).getFullYear()}}
+                                                Date(item.pub_date).getMonth()+1 }}.{{ new Date(item.pub_date).getFullYear()}}
                                                 {{new Date(item.pub_date).getHours()}}:{{(":"+"0"+new
                                                 Date(item.pub_date).getMinutes()).substr(-2)}}
                                             </td>
                                             <td class="table_data">
-                                                <button class="exp_list_buttons_rem" @click="postOutcome"><i
+                                                <button class="exp_list_buttons_rem" ><i
                                                         class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
@@ -73,13 +73,16 @@
         methods: {
             postOutcome() {
                 this.$store.dispatch('postOutcome', this.form);
+                console.log(this.form)
                 return false;
+
             },
             getOutcome() {
                 if (this.$store.state.outcome.length === 0) {
                     this.$store.dispatch('getOutcome');
                 }
             },
+
         },
         // computed: {
         //     outcomeList () {
