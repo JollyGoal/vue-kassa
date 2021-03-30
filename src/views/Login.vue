@@ -5,16 +5,16 @@
                 <div class="row">
                     <div class="login__column" style="border: 1px solid #0069d9;">
                         <div class="form__container">
-                            <form>
+                            <form @submit.prevent="postLogin">
                                 <div class="form__input">
-                                    <input type="text" placeholder="Введите имя">
+                                    <input type="text" name="username" v-model="form.username" placeholder="Введите имя">
                                 </div>
 
                                 <div class="form__input">
-                                    <input type="password" name="password" placeholder="Введите пороль" >
+                                    <input type="password" name="password" v-model="form.password" placeholder="Введите пороль" >
                                 </div>
                                 <div style="text-align: center">
-                                    <button class="login__button">Войти</button>
+                                    <input type="submit" class="login__button" value="Войти">
                                 </div>
                             </form>
                         </div>
@@ -30,9 +30,19 @@
         name: "Login",
         data(){
           return{
-
+            form:{
+                username:'',
+                password:'',
+            }
           }
         },
+        methods:{
+            postLogin(){
+               this.$store.dispatch("postAdmin", this.form)
+                this.$router.push({name: "User"})
+            }
+        },
+
     }
 </script>
 
@@ -115,5 +125,6 @@
             background: #0069d9;
         }
     }
+
 
 </style>

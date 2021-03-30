@@ -5,14 +5,15 @@
                 <div class="user_cont_wrap">
                     <div class="first_table">
                         <div class="search">
-                            <input type="text" placeholder="Поиск">
+                            <input type="text" v-model="query" placeholder="Поиск">
                             <div class="btn_block">
                                 <div class="add_input_btn">
-                                    <div class="search_btn"><i class="far fa-search"></i> Поиск</div>
+                                    <div class="search_btn" @click="getSearchlist"><i class="far fa-search"></i> Поиск
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="table_block">
+                        <div class="table_block" @scroll="checkScr" ref="scladScr">
                             <table class="table">
                                 <thead class="table_head">
                                 <tr class="table_row">
@@ -21,12 +22,14 @@
                                     <th class="table_data">Цена</th>
                                     <th class="table_data">Добавить</th>
                                 </tr>
-                                <tr class="table_row">
-                                    <td class="table_data">Наименованние</td>
-                                    <td class="table_data">Номер</td>
-                                    <td class="table_data">Цена</td>
+                                <tr class="table_row" v-for="(i , index) in $store.state.items" :key="index">
+                                    <td class="table_data">{{i.name}}</td>
+                                    <td class="table_data">{{i.id}}</td>
+                                    <td class="table_data">{{i.price}}</td>
                                     <td class="table_data">
-                                        <button class="table_data_btn"><i class="fas fa-plus"></i> Добавить</button>
+                                        <button @click="addInBasket(index)" class="table_data_btn"><i
+                                                class="fas fa-plus"></i> Добавить
+                                        </button>
                                     </td>
                                 </tr>
                                 </thead>
@@ -53,14 +56,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="сheck_table_row">
+                                <tr class="сheck_table_row" v-for="(item , index) in $store.state.basket" :key="index">
                                     <td class="сheck_table_data" @click="showModal=true">
-                                        <button class="table_data_btn"><i class="fas fa-percent" ></i></button>
+                                        <button class="table_data_btn"><i class="fas fa-percent"></i></button>
                                     </td>
-                                    <td class="сheck_table_data">Номер</td>
-                                    <td class="сheck_table_data">Цена</td>
+                                    <td class="сheck_table_data">{{item.name}}</td>
+                                    <td class="сheck_table_data">{{item.price}}</td>
                                     <td class="сheck_table_data">
-                                        <button class="title_head_btn"><i class="fas fa-trash-alt"></i></button>
+                                        <button @click="remFromBasket(index)" class="title_head_btn"><i
+                                                class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -69,10 +73,10 @@
                         <div class="outcast">
                             <div class="outcast_head">
                                 <div class="text">
-                                    <span>Итог</span>:<span>12345</span>
+                                    <span>Итог</span>:<span>{{sum}}</span>
                                 </div>
-                                <div class="сheck_give" @click="showChek=true">
-                                    <button class="check_btn" >Счет</button>
+                                <div class="сheck_give" @click="showCheck=true">
+                                    <button class="check_btn">Счет</button>
                                 </div>
                             </div>
                         </div>
@@ -113,14 +117,14 @@
             </div>
         </div>
     </transition>
-    <transition name="modal" v-show="showChek">
+    <transition name="modal" v-show="showCheck">
         <div class="modal-mask">
             <div class="modal-wrapper">
                 <div class="modal-container">
                     <div class="modal-header">
                         <slot name="header">
                             <div>
-                               Закрыть счет
+                                Закрыть счет
                             </div>
                         </slot>
                     </div>
@@ -145,7 +149,7 @@
                     <div class="modal-header">
                         <slot name="header">
                             <div>
-                               Очистить корзину
+                                Очистить корзину
                             </div>
                         </slot>
                     </div>
@@ -153,7 +157,7 @@
                         <slot name="body">
                             <div class="body">
                                 <div class="body_btn">
-                                    <button class="btnm green">Да</button>
+                                    <button @click="emptyBasket" class="btnm green">Да</button>
                                     <button class="btnm red" @click="showClean=false">Отмена</button>
                                 </div>
                             </div>
@@ -166,19 +170,68 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
+
     export default {
         name: "User",
         data() {
             return {
                 showModal: false,
-                showChek: false,
+                showCheck: false,
                 showClean: false,
+                query: "",
             }
 
 
         },
+        watch: {
+            query(param) {
+                this.$store.state.query = param;
+                this.$store.state.itemListOffset = 0;
+                this.getSearchlist()
+            },
 
+        },
+        methods: {
+            getItemsData() {
+                if (this.$store.state.items.length === 1) {
+                    this.$store.dispatch('getItems');
+                }
+            },
+            getSearchlist() {
+                this.$store.state.items = [];
 
+                this.$store.dispatch('getItems');
+            },
+            checkScr() {
+                this.scr = this.$refs.scladScr.scrollHeight <= this.$refs.scladScr.scrollTop + this.$refs.scladScr.offsetHeight + 140;
+                if (this.scr) {
+                    if (this.fetchTimeout) clearTimeout(this.fetchTimeout);
+                    this.fetchTimeout = setTimeout(() => {
+                        this.$store.dispatch('getItems');
+                    }, 500);
+                }
+            },
+            addInBasket(index) {
+                this.$store.commit('addToBasket', index)
+            },
+            remFromBasket(index) {
+                this.$store.commit('removeFromBasket', index)
+            },
+            emptyBasket() {
+                this.$store.commit('removeBasket')
+                this.showClean = false
+
+            }
+        },
+        created() {
+            this.getItemsData();
+        },
+        computed: {
+            ...mapGetters({
+                sum:"overPrice",
+            })
+        }
     }
 </script>
 
@@ -250,6 +303,7 @@
             padding: 3px 20px;
             font-size: 20px;
             outline: none;
+            border: 1px solid grey;
 
             &::placeholder {
                 font-size: 20px;
@@ -482,7 +536,8 @@
 
     .green {
         background: #28a745;
-        &:hover{
+
+        &:hover {
             background: #218838;
         }
     }

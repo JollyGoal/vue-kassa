@@ -1,9 +1,10 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
+import store from '../vuex/vuex'
 
 const routes = [
     {
-        path: '/Home',
+        path: '/',
         name: 'Home',
         component: Home
 
@@ -19,15 +20,15 @@ const routes = [
         component: () => import('../views/Static.vue')
     },
     {
+        path: '/login',
+        name: 'Login',
+        component: () => import('../views/Login.vue')
+    },
+    {
         path: '/Add/:id',
         name: 'Add',
         props: true,
         component: () => import('../views/Add.vue')
-    },
-    {
-        path: '/',
-        name: 'Login',
-        component: () => import('../views/Login.vue')
     },
     {
         path: '/Exp',
@@ -50,5 +51,19 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
 })
+
+router.beforeEach(async (to, from, next) => {
+
+    if (store.state.token.length === 0 && to.path !== '/login') {
+        return next('/login')
+    }
+
+    if (store.state.user) {
+        await store.dispatch('getMe')
+    }
+    console.log(store.state.user)
+
+    return next()
+});
 
 export default router
